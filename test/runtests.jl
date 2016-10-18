@@ -1509,3 +1509,10 @@ for T in types
     x = @compat Nullable{Array{T}}()
     @test_throws UndefRefError unsafe_get(x)
 end
+
+s = "Koala test: 🐨"
+for T in (UInt8,UInt16,UInt32,Cwchar_t)
+    @test transcode(Compat.String, transcode(T, s)) == s
+    @test transcode(UInt8, transcode(T, s)) == s.data
+    @test transcode(T, s) == transcode(T, s.data) == transcode(T, transcode(T, s))
+end
